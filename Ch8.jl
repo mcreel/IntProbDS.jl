@@ -1,36 +1,42 @@
 # Chapter 8.1 Maximum-likelihood Estimation
 
 # Visualizing the likelihood function
-## Julia: Visualize the likelihood function
+## Julia: Visualize the likelihood function, surface plot
 using StatsPlots
 plotlyjs()
 N = 50
 S = range(1., N, step=0.1)
-theta = range(0.1, 0.9,length=100)
-L(S, theta) = S*log(theta) + (N-S)*log(1. - theta)
-surface(S,theta, (S, theta) -> L(S, theta), color=:jet)
+θ = range(0.1, 0.9,length=100)
+L(S, θ) = S*log(θ) + (N-S)*log(1. - θ)
+surface(S, θ, (S, θ) -> L(S, θ), color=:jet)
 xlabel!("S")
-ylabel!("theta")
-title!("Log likelihood") 
+ylabel!("θ")
+title!("ℒ(θ|S)") 
+
+## Visualizing the likelihood function, heatmap
+using StatsPlots
+gr()
+N = 50
+S = range(1., N, step=0.1)
+θ = range(0.1, 0.9,length=100)
+L(S, θ) = S*log(θ) + (N-S)*log(1. - θ)
+heatmap(S, θ, (S, θ) -> L(S, θ), color=:jet)
+xlabel!("S")
+ylabel!("θ")
+title!("ℒ(θ|S)") 
+
+## Visualizing the likelihood function, slice 
+using StatsPlots
+gr()
+N = 50
+S = 25  # set value of S here
+θ = range(0.1, 0.9,length=100)
+L(θ) = S*log(θ) + (N-S)*log(1. - θ)
+plot(θ, θ -> L(θ),label=false)
+xlabel!("θ")
+title!("ℒ(θ|S=$S)") 
 
 #=
-
-# Visualizing the likelihood function
-# Julia code
-N = 50;
-S = 1:N;
-theta = linspace(0.1,0.9,100);
-[S_grid, theta_grid] = meshgrid(S, theta);
-L = S_grid.*log(theta_grid) + (N-S_grid).*log(1-theta_grid);
-
-figure;
-plot(theta, L(:,12), 'LineWidth', 6, 'Color', [0,0,0]);
-xlabel('theta');
-axis([0.1 0.9 min(ylim) max(ylim)]);
-grid on;
-set(gcf, 'Position', [100, 100, 600, 400]);
-set(gca,'FontWeight','bold','fontsize',14);
-
 # ML estimation for single-photon imaging
 # Julia code
 lambda = im2double(imread('cameraman.tif'));
