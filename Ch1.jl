@@ -3,7 +3,7 @@
 # Visualizing a geometric series
 
 ## Julia code to generate a geometric series
-using StatsPlots
+using StatsPlots:bar
 p = 0.5
 n = 1:10
 X = p .^ n
@@ -21,14 +21,13 @@ factorial(k)
 # Inner product of two vectors
 
 ## Julia code to perform and inner product
-using LinearAlgebra
 x = [1, 0, -1]
 y = [3, 2, 0]
 x'y
 
 ## Norm of a vector
 # Julia code to compute the norm
-using LinearAlgebra
+using LinearAlgebra:norm
 x = [1, 0, -1]
 norm(x)
 
@@ -37,12 +36,6 @@ norm(x)
 W = [1. 2. 3.; 4. 5. 6.; 7. 8. 9.]
 x = [2, -1, 1]
 z = x'W*x
-
-## Matrix inverse
-# Julia code to compute a matrix inverse
-X = [1. 3.; -2. 7.; 0. 1.]
-XtX = X'X
-XtXinv = inv(XtX)
 
 ## System of linear equations
 # Julia code to solve Xβ = y
