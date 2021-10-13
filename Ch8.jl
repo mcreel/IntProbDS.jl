@@ -3,7 +3,7 @@
 # Visualizing the likelihood function
 ## Julia: Visualize the likelihood function, surface plot
 using StatsPlots
-plotlyjs()
+plotlyjs() # this backend allows rotating with mouse
 N = 50
 S = range(1., N, step=0.1)
 θ = range(0.1, 0.9,length=100)
@@ -39,48 +39,53 @@ title!("ℒ(θ|S=$S)")
 
 # ML estimation for single-photon imaging
 # Julia code
-using Images, ImageView, Distributions
+using Images, Distributions
+using ImageView:imshow
 download("https://probability4datascience.com/data/cameraman.tif", "./cameraman.tif")
 λ  = Float64.(load("cameraman.tif"))
 T = 100
 x = [rand.(Poisson.(λ)) for _=1:T]
 y = [x[i] .>= 1. for i=1:T]
-λhat = -log.(1. .-mean(y))
+λhat = -log.(1. .- mean(y))
 imshow(x[1])
 imshow(λhat)
 
-#=
+
 # Chapter 8.2 Properties of the ML estimation
 
 # Visualizing the invariance principle
 # Julia code
-figure;
-N = 50;
-S = 20;
-theta = linspace(0.1,0.9,1000);
-L = S.*log(theta) + (N-S).*log(1-theta);
-plot(theta, L, 'LineWidth', 6, 'Color', [0.5,0.5,0.75]);
-set(gcf, 'Position', [100, 100, 600, 300]);
-set(gca,'FontWeight','bold','fontsize',14);
-grid on;
+using StatsPlots
+N = 50
+S = 20
+θ = range(0.1,0.9,length=1000)
+η  = -log.(1. .- θ) # the reparameterization transformation
+L₁(θ) = S*log(θ) + (N-S)*log(1. - θ) # log likelihood in terms of θ 
+L₂(η) = S*log(1. - exp(-η)) - (N-S)*η # log likelihood in terms of η 
+# plot the log likelihood with θ parameterization 
+p4 = plot(θ, θ -> L₁(θ), linewidth=5, color=:blue, label=false)
+xlabel!("θ")
+title!("ℒ₁(θ|S=$S)") 
+vline!([0.4], label=false, color=:red)
+# plot the transformation
+p2 = plot(θ, η, linewidth=5, color=:black, label=false)
+xlabel!("θ")
+ylabel!("η") 
+title!("η(θ)") 
+vline!([0.4], label=false, color=:red)
+hline!([0.5], label=false, color=:green)
+# plot the log likelihood with η parameterization
+p1 = plot(L₂.(η), η,  linewidth=5, color=:blue, label=false, xflip=true)
+ylabel!("η") 
+hline!([0.5], label=false, color=:green)
+title!("ℒ₂(η|S=$S)")
+# blank place holder plot
+p3 = plot(grid=false, xaxis=false, yaxis=false, xticks=false, yticks=false)
+# plot the whole set in the final image
+plot(p1, p2, p3, p4)
 
-h_theta = -log(1-theta);
-figure;
-plot( theta, h_theta, 'LineWidth', 6, 'Color', [0,0,0]);
-set(gcf, 'Position', [100, 100, 600, 400]);
-set(gca,'FontWeight','bold','fontsize',14);
-grid on;
 
-theta = linspace(0.1,2.5,1000);
-L = S.*log(1-exp(-theta)) - theta.*(N-S);
-figure;
-plot(theta, L, 'LineWidth', 6, 'Color', [0,0,0.75]);
-set(gcf, 'Position', [100, 100, 600, 400]);
-set(gca,'FontWeight','bold','fontsize',14);
-grid on;
-
-
-
+#=
 # Chapter 8.3 Maximum-a-Posteriori Estimation
 # Influence of the priors
 # Julia code
