@@ -1,44 +1,25 @@
 # Chapter 8.1 Maximum-likelihood Estimation
-
-# Visualizing the likelihood function
-## Julia: Visualize the likelihood function, surface plot
+## Visualizing the likelihood function
 using StatsPlots
+N = 50
+S = range(1., N, step=0.1)
+θ = range(0.1, 0.9,length=100)
+L(S, θ) = S*log(θ) + (N-S)*log(1. - θ)
+# the surface plot
 plotlyjs() # this backend allows rotating with mouse
-N = 50
-S = range(1., N, step=0.1)
-θ = range(0.1, 0.9,length=100)
-L(S, θ) = S*log(θ) + (N-S)*log(1. - θ)
-surface(S, θ, (S, θ) -> L(S, θ), color=:jet)
-xlabel!("S")
-ylabel!("θ")
-title!("ℒ(θ|S)") 
-
-## Visualizing the likelihood function, heatmap
-using StatsPlots
+p1 = surface(S, θ, (S, θ) -> L(S, θ), color=:jet, xlabel="S", ylabel="θ",
+    title="ℒ(θ|S)") 
+# the bird's eye view
 gr()
-N = 50
-S = range(1., N, step=0.1)
-θ = range(0.1, 0.9,length=100)
-L(S, θ) = S*log(θ) + (N-S)*log(1. - θ)
-heatmap(S, θ, (S, θ) -> L(S, θ), color=:jet)
-xlabel!("S")
-ylabel!("θ")
-title!("ℒ(θ|S)") 
+p2 = heatmap(S, θ, (S, θ) -> L(S, θ), color=:jet, xlabel="S", ylabel="θ",
+    title="bird's eye view")
+SS = 25 # set the value for the slice here
+vline!([SS], label=false, color=:black)
+# slice through the log likelihood 
+p3 = plot(θ, θ -> L(SS, θ),label=false, xlabel="θ", title="ℒ(θ|S=$SS)") 
+plot(p2, p3)
 
-## Visualizing the likelihood function, slice 
-using StatsPlots
-gr()
-N = 50
-S = 25  # set value of S here
-θ = range(0.1, 0.9,length=100)
-L(θ) = S*log(θ) + (N-S)*log(1. - θ)
-plot(θ, θ -> L(θ),label=false)
-xlabel!("θ")
-title!("ℒ(θ|S=$S)") 
-
-
-# ML estimation for single-photon imaging
-# Julia code
+## ML estimation for single-photon imaging
 using Images, Distributions
 using ImageView:imshow
 download("https://probability4datascience.com/data/cameraman.tif", "./cameraman.tif")
@@ -47,14 +28,12 @@ T = 100
 x = [rand.(Poisson.(λ)) for _=1:T]
 y = [x[i] .>= 1. for i=1:T]
 λhat = -log.(1. .- mean(y))
-imshow(x[1])
-imshow(λhat)
+imshow(x[1]) # a single sample image
+imshow(λhat) # the ML recovered image
 
 
 # Chapter 8.2 Properties of the ML estimation
-
-# Visualizing the invariance principle
-# Julia code
+## Visualizing the invariance principle
 using StatsPlots
 N = 50
 S = 20
@@ -85,40 +64,21 @@ p3 = plot(grid=false, xaxis=false, yaxis=false, xticks=false, yticks=false)
 plot(p1, p2, p3, p4)
 
 
-#=
 # Chapter 8.3 Maximum-a-Posteriori Estimation
 # Influence of the priors
-# Julia code
-N = 1;
-sigma0 = 1;
-mu0    = 0.0;
-x = 5;%*rand(N,1);
-t = linspace(-3,7,1000);
+N = 1
+sigma0 = 1.
+mu0    = 0.0
+x = 5. #*rand(N)
+t = range(-3.,7.,length=1000)
+θ = (mean(x)*sigma0^2. + mu0/N)/(sigma0^2. + 1. /N) # MAP
+p0 = pdf(Normal(mean(x),1.0), t) # likelihood
+p1 = pdf(Normal(θ, 1.), t)       # posterior NEED TO CORRECT variance if N>1
+prior = pdf(Normal(mu0,sigma0),t) ./ 10.
+plot(t, [p0, p1, prior], label=["ML" "MAP" "prior"], linewidth=5, legend=:topleft)
+plot!([x], [0.1*ones(N)], line=:stem, label="data", marker=:circle, linewidth=5)
 
-q = NaN(1,1000);
-for i=1:N
-    [val,idx] = min(abs(t-x(i)));
-    q(idx) = 0.1;
-end
-
-p0 = normpdf(t,0,1);
-theta = (mean(x)*sigma0^2+mu0/N)/(sigma0^2+1/N);
-p1 = normpdf(t,theta,1);
-prior = normpdf(t,mu0,sigma0)/10;
-
-figure;
-h1 = plot(t,normpdf(t,mean(x),1),'LineWidth',4,'Color',[0.8,0.8,0.8]); hold on;
-h2 = plot(t,p1,'LineWidth',4,'Color',[0,0.0,0.0]);
-h3 = stem(t,q,'LineWidth',4,'Color',[0.5,0.5,0.5],'MarkerSize',10);
-h5 = plot(t,prior,'LineWidth',4,'Color',[1,0.5,0.0]);
-
-grid on;
-axis([-3 7 0 0.5]);
-xticks(-5:1:10);
-yticks(0:0.05:0.5);
-set(gcf, 'Position', [100, 100, 600, 300]);
-set(gca,'FontWeight','bold','fontsize',14);
-
+#=
 # Conjugate priors
 # Julia code
 sigma0 = 0.25;
