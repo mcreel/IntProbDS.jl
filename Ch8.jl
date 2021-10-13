@@ -32,8 +32,8 @@ imshow(x[1]) # a single sample image
 imshow(λhat) # the ML recovered image
 
 
-# Chapter 8.2 Properties of the ML estimation
-## Visualizing the invariance principle
+## Chapter 8.2 Properties of the ML estimation
+# Visualizing the invariance principle
 using StatsPlots
 N = 50
 S = 20
@@ -64,56 +64,46 @@ p3 = plot(grid=false, xaxis=false, yaxis=false, xticks=false, yticks=false)
 plot(p1, p2, p3, p4)
 
 
-# Chapter 8.3 Maximum-a-Posteriori Estimation
+## Chapter 8.3 Maximum-a-Posteriori Estimation
 # Influence of the priors
-N = 1
-sigma0 = 1.
-mu0    = 0.0
-x = 5. #*rand(N)
+# likelihood is N(θ,1) 
+using StatsPlots, Distributions
+N = 5       # sample size
+μ₀  = 0.0   # prior mean
+σ₀  = 1.    # prior std. dev.
+θ = 5.      # true mean of sample data
+x = rand(Normal(θ,1), N)    # the sample data
+xbar  = mean(x) # mean of sample data
 t = range(-3.,7.,length=1000)
-θ = (mean(x)*sigma0^2. + mu0/N)/(sigma0^2. + 1. /N) # MAP
-p0 = pdf(Normal(mean(x),1.0), t) # likelihood
-p1 = pdf(Normal(θ, 1.), t)       # posterior NEED TO CORRECT variance if N>1
-prior = pdf(Normal(mu0,sigma0),t) ./ 10.
-plot(t, [p0, p1, prior], label=["ML" "MAP" "prior"], linewidth=5, legend=:topleft)
-plot!([x], [0.1*ones(N)], line=:stem, label="data", marker=:circle, linewidth=5)
+θhat = (σ₀^2. * xbar + μ₀/N)/(σ₀^2. + 1. /N) # MAP
+σhat = sqrt(1. / (1. / σ₀^2. + N))  # s.d. posterior 
+p0 = pdf(Normal(xbar,1.0), t)       # likelihood
+p1 = pdf(Normal(θhat, σhat), t)  # posterior
+prior = pdf(Normal(μ₀,σ₀),t)     # prior, divided by 10 to 
+plot(t, [p0, p1, prior], label=["Likelihood" "Posterior" "prior"], linewidth=3, legend=:topleft)
+plot!([x], [0.1*ones(N)], line=:stem, label="data", marker=:circle, linewidth=3, title="N = $N")
 
-#=
-# Conjugate priors
-# Julia code
-sigma0 = 0.25;
-mu0    = 0.0;
 
-mu     = 1;
-sigma  = 0.25;
-
-Nset = [0 1 2 5 8 12 20];
-x0 = sigma*randn(100,1);
-
+## Conjugate priors
+using StatsPlots, Distributions
+σ₀ = 0.25
+μ₀ = 0.0
+μ  = 1.
+σ  = 0.25
+Nset = [0 1 2 5 8 12 20]
+x0 = σ .* randn(100)
+posterior = zeros(1000,7)
+t = range(-1.,1.5,length=1000)
+p0 = pdf(Normal(0.,1.), t)
 for i=1:7
-    N = Nset(i);
-    x = x0(1:N);
-    t = linspace(-1,1.5,1000);
-
-    p0     = normpdf(t,0,1);
-    theta  = mu*(N*sigma0^2)/(N*sigma0^2+sigma^2) + mu0*(sigma^2)/(N*sigma0^2+sigma^2);
-    sigmaN = sqrt(1/(1/sigma0^2+N/sigma^2));
-    posterior(:,i) = normpdf(t,theta,sigmaN);
+    N = Nset[i]
+    x = x0[1:N]
+    θ  = μ * (N*σ₀^2.)/(N*σ₀^2. + σ ^2.) + μ₀*(σ^2.)/(N*σ₀^2. + σ^2.)
+    σN= sqrt(1. /(1. /σ₀^2. + N/σ^2.))
+    posterior[:,i] = pdf(Normal(θ, σN), t)
 end
+plot(t, posterior, linewidth=2., 
+    label=["N = 0" "N = 1" "N = 2" "N = 5" "N = 8" "N = 12" "N = 20"],
+    legend=:topleft)
 
-figure;
-plot(t,posterior(:,1)', 'LineWidth',2,'Color',[0.9,0.0,0.0]);  hold on;
-plot(t,posterior(:,2)', 'LineWidth',2,'Color',[1,0.6,0.0]);
-plot(t,posterior(:,3)', 'LineWidth',2,'Color',[1,0.9,0.3]);
-plot(t,posterior(:,4)', 'LineWidth',2,'Color',[0.0,0.8,0.1]);
-plot(t,posterior(:,5)', 'LineWidth',2,'Color',[0.0,0.6,0.6]);
-plot(t,posterior(:,6)', 'LineWidth',2,'Color',[0.0,0.2,0.8]);
-plot(t,posterior(:,7)', 'LineWidth',2,'Color',[0.5,0.2,0.5]);
 
-legend('N = 0', 'N = 1', 'N = 2', 'N = 5', 'N = 8', 'N = 12', 'N = 20', 'Location', 'NW');
-grid on;
-axis([-1 1.5 0 8]);
-set(gcf, 'Position', [100, 100, 600, 300]);
-set(gca,'FontWeight','bold','fontsize',14);
-
-=#
