@@ -36,22 +36,20 @@ plot(θ, θ -> L(θ),label=false)
 xlabel!("θ")
 title!("ℒ(θ|S=$S)") 
 
-#=
+
 # ML estimation for single-photon imaging
 # Julia code
-lambda = im2double(imread('cameraman.tif'));
-T = 100;
-x = poissrnd( repmat(lambda, [1,1,T]) );
-y = (x>=1);
-lambdahat = -log(1-mean(y,3));
+using Images, ImageView, Distributions
+download("https://probability4datascience.com/data/cameraman.tif", "./cameraman.tif")
+λ  = Float64.(load("cameraman.tif"))
+T = 100
+x = [rand.(Poisson.(λ)) for _=1:T]
+y = [x[i] .>= 1. for i=1:T]
+λhat = -log.(1. .-mean(y))
+imshow(x[1])
+imshow(λhat)
 
-figure(1);
-imshow(x(:,:,1));
-
-figure(2);
-imshow(lambdahat,[]);
-
-
+#=
 # Chapter 8.2 Properties of the ML estimation
 
 # Visualizing the invariance principle
