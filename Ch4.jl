@@ -18,3 +18,21 @@ p2 = plot(x -> cdf(gmm, x), -5, 10,
 
 plot(p1, p2, layout=(1, 2), 
     size=(600, 300), legend=:topleft)
+
+
+
+# CDF of a uniform random variable
+u = Uniform(-3, 4)
+
+p1 = plot(x -> 0, -5:0.01:1, fillrange=x->pdf(u, x),
+    linealpha=0, fillcolor=RGB(0.8, 0.8, 1), alpha=0.5, label=false)
+plot!(p1, x -> pdf(u, x), -5, 10, 
+    color=1, linewidth=6, ylims=(0, 0.4), label="PDF")
+
+p2 = plot(x -> cdf(u, x), -5:0.01:10, 
+    linewidth=6, label="CDF")
+vline!(p2, [-3, 4], 
+    linestyle=:dash, color=:green, label=false)
+
+plot(p1, p2, layout=(1, 2), 
+    size=(600, 300), legend=:topleft)
