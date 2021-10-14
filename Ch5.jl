@@ -44,8 +44,8 @@ x₂ = -3.5:0.01:3.5
 
 f(x₁, x₂) = pdf(p, [x₁, x₂])
 
-scatter(X[1, :], X[2, :], legend = false)
-contour!(x₁, x₂, f, linewidth = 2)
+scatter(X[1, :], X[2, :], legend=false)
+contour!(x₁, x₂, f, linewidth=2)
 
 ####################################################################
 
