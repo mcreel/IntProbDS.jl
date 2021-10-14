@@ -1,6 +1,6 @@
 # Chapter 8.1 Maximum-likelihood Estimation
 ## Visualizing the likelihood function
-using StatsPlots
+using Plots
 N = 50
 S = range(1., N, step=0.1)
 θ = range(0.1, 0.9,length=100)
@@ -34,7 +34,7 @@ imshow(λhat) # the ML recovered image
 
 ## Chapter 8.2 Properties of the ML estimation
 # Visualizing the invariance principle
-using StatsPlots
+using Plots
 N = 50
 S = 20
 θ = range(0.1,0.9,length=1000)
@@ -67,7 +67,7 @@ plot(p1, p2, p3, p4)
 ## Chapter 8.3 Maximum-a-Posteriori Estimation
 # Influence of the priors
 # likelihood is N(θ,1) 
-using StatsPlots, Distributions
+using Plots, Distributions
 N = 5       # sample size
 μ₀  = 0.0   # prior mean
 σ₀  = 1.    # prior std. dev.
@@ -85,7 +85,7 @@ plot!([x], [0.1*ones(N)], line=:stem, label="data", marker=:circle, linewidth=3,
 
 
 ## Conjugate priors
-using StatsPlots, Distributions
+using Plots, Distributions
 σ₀ = 0.25
 μ₀ = 0.0
 μ  = 1.

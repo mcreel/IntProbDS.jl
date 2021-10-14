@@ -3,7 +3,7 @@
 # Visualizing a geometric series
 
 ## Julia code to generate a geometric series
-using StatsPlots:bar
+using Plots:bar
 p = 0.5
 n = 1:10
 X = p .^ n

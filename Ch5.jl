@@ -1,6 +1,6 @@
 # Julia code to compute the correlation coefficient
 using Distributions
-using StatsPlots
+using Plots
 
 x = rand(MvNormal([0, 0], [3 1; 1 1]), 1000)
 # x = rand(MvNormal([0, 0], [3 0; 0 3]), 1000)
@@ -34,7 +34,7 @@ cov(X)
 
 # Julia code: Overlay random numbers with the Gaussian contour.
 using Distributions
-using StatsPlots
+using Plots
 
 p = MvNormal([0, 0], [0.25 0.3; 0.3 1])
 
