@@ -21,20 +21,20 @@ factorial(k)
 # Inner product of two vectors
 
 ## Julia code to perform and inner product
-x = [1, 0, -1]
-y = [3, 2, 0]
+x = [1., 0., -1.]
+y = [3., 2., 0.]
 x'y
 
 ## Norm of a vector
 # Julia code to compute the norm
 using LinearAlgebra:norm
-x = [1, 0, -1]
+x = [1., 0., -1.]
 norm(x)
 
 ## Weighted norm of a vector
 # Julia code to compute the weighted norm
 W = [1. 2. 3.; 4. 5. 6.; 7. 8. 9.]
-x = [2, -1, 1]
+x = [2., -1., 1.]
 z = x'W*x
 
 ## System of linear equations
