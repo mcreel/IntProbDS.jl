@@ -143,3 +143,21 @@ plot(p1, p2, layout=(1, 2),
     size=(600, 300), legend=:topleft)
 
 
+
+
+# Skewness and kurtosis of a random variable
+
+# Julia code to plot a Gamma distribution
+θ = 1
+
+p1 = plot(size=(600, 300))
+plot!(p1, x -> pdf(Gamma(2, θ), x), 0, 30, lw=4, c=RGB(0,0,0), label="k = 2")
+plot!(p1, x -> pdf(Gamma(5, θ), x), 0, 30, lw=4, c=RGB(0.2,0.2,0.2), label="k = 5")
+plot!(p1, x -> pdf(Gamma(10, θ), x), 0, 30, lw=4, c=RGB(0.4,0.4,0.4), label="k = 10")
+plot!(p1, x -> pdf(Gamma(15, θ), x), 0, 30, lw=4, c=RGB(0.6,0.6,0.6), label="k = 15")
+plot!(p1, x -> pdf(Gamma(20, θ), x), 0, 30, lw=4, c=RGB(0.8,0.8,0.8), label="k = 20")
+
+# Julia code to compute skewness and kurtosis
+X = rand(Gamma(3, 5), 10_000)
+s = skewness(X)
+k = kurtosis(X)
