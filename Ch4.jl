@@ -148,6 +148,9 @@ plot(p1, p2, layout=(1, 2),
 # Skewness and kurtosis of a random variable
 
 # Julia code to plot a Gamma distribution
+using Distributions
+using Plots
+
 θ = 1
 
 p1 = plot(size=(600, 300))
@@ -161,3 +164,21 @@ plot!(p1, x -> pdf(Gamma(20, θ), x), 0, 30, lw=4, c=RGB(0.8,0.8,0.8), label="k 
 X = rand(Gamma(3, 5), 10_000)
 s = skewness(X)
 k = kurtosis(X)
+
+
+# Chapter 4.8
+
+# Generating Gaussians from uniform
+
+# Julia code to generate Gaussian from uniform
+using Distributions
+using Plots
+
+mu = 3
+sigma = 2
+U = rand(10_000)
+gU = sigma * quantile(Normal(), U) .+ mu
+
+p1 = histogram(U, label="U")
+p2 = histogram(gU, label="gU")
+plot(p1, p2, layout=(1, 2), size=(600, 300), legend=:topleft)
