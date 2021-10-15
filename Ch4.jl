@@ -93,3 +93,53 @@ u = Uniform(0, 1)
 F = cdf(u, 0.3) - cdf(u, 0.2)
 
 
+
+# PDF of an exponential random variable
+
+# Julia code to generate PDF and CDF of an exponential random variable
+using Distributions 
+using Plots
+
+exp1 = Exponential(1/2)
+exp2 = Exponential(1/5)
+
+# Plotting the pdfs
+p1 = plot(x -> pdf(exp1, x), 0, 1, 
+    linewidth=4, linestyle=:dashdot, color=RGB(0,0.2,0.8), label="λ = 2")
+plot!(p1, x -> pdf(exp2, x), 0, 1,
+    linewidth=4, color=RGB(0.8,0.2,0), label="λ = 5")
+
+# Plotting the cdfs
+p2 = plot(x -> cdf(exp1, x), 0, 1, 
+    linewidth=4, linestyle=:dashdot, color=RGB(0,0.2,0.8), label="λ = 2", legend=:topleft)
+plot!(p2, x -> cdf(exp2, x), 0, 1,
+    linewidth=4, color=RGB(0.8,0.2,0), label="λ = 5")
+
+# Figure with both plots
+plot(p1, p2, layout=(1, 2), 
+    size=(600, 400))
+
+
+
+# Chapter 4.6
+
+# PDF and CDF of a Gaussian random variable
+
+# Julia code to generate standard Gaussian PDF and CDF
+using Distributions
+using Plots
+
+normdist = Normal()
+
+p1 = plot(x -> 0, -5:0.01:-1, fillrange=x->pdf(normdist, x),
+    linealpha=0, fillcolor=RGB(0.8, 0.8, 1), alpha=0.5, label=false)
+plot!(p1, x -> pdf(normdist, x), -5, 5, 
+    color=1, linewidth=6, ylims=(0, 0.6), label="PDF")
+
+p2 = plot(x -> cdf(normdist, x), -5:0.01:5, 
+    linewidth=6, label="CDF")
+
+plot(p1, p2, layout=(1, 2), 
+    size=(600, 300), legend=:topleft)
+
+
