@@ -20,18 +20,22 @@ plot(p1, p2, layout=(1, 2),
     size=(600, 300), legend=:topleft)
 
 
-##
+
 # CDF of a uniform random variable
+
+# Julia code to generate the PDF and CDF of a uniform random variable
 using Distributions
 using Plots
 
 u = Uniform(-3, 4)
 
+# pdf
 p1 = plot(x -> 0, -5:0.01:1, fillrange=x->pdf(u, x),
     linealpha=0, fillcolor=RGB(0.8, 0.8, 1), alpha=0.5, label=false)
 plot!(p1, x -> pdf(u, x), -5, 10, 
     color=1, linewidth=6, ylims=(0, 0.4), label="PDF")
 
+# cdf
 p2 = plot(x -> cdf(u, x), -5:0.01:10, 
     linewidth=6, label="CDF")
 vline!(p2, [-3, 4], 
@@ -40,18 +44,23 @@ vline!(p2, [-3, 4],
 plot(p1, p2, layout=(1, 2), 
     size=(600, 300), legend=:topleft)
 
-## 
+
+
 # CDF of an exponential random variable
+
+# Julia code to generate the PDF and CDF of an exponential random variable
 using Distributions
 using Plots
 
 u = Exponential(2)
 
+# pdf
 p1 = plot(x -> 0, -5:0.01:1, fillrange=x->pdf(u, x),
     linealpha=0, fillcolor=RGB(0.8, 0.8, 1), alpha=0.5, label=false)
 plot!(p1, x -> pdf(u, x), -5, 10, 
     color=1, linewidth=6, ylims=(0, 0.6), label="PDF")
 
+# cdf
 p2 = plot(x -> cdf(u, x), -5:0.01:10, 
     linewidth=6, label="CDF")
 
@@ -59,9 +68,12 @@ plot(p1, p2, layout=(1, 2),
     size=(600, 300), legend=:topleft)
 
 
+
 # Chapter 4.5
 
 # Generate a uniform random variable
+
+# Julia code to generate 1000 uniform random numbers
 using Distributions
 using Plots
 
@@ -164,6 +176,8 @@ plot!(p1, x -> pdf(Gamma(20, θ), x), 0, 30, lw=4, c=RGB(0.8,0.8,0.8), label="k 
 X = rand(Gamma(3, 5), 10_000)
 s = skewness(X)
 k = kurtosis(X)
+
+
 
 
 # Chapter 4.8
