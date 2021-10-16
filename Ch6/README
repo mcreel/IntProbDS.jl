@@ -1,0 +1,13 @@
+I left as a set of scripts. Hopefully that isn't an issue. The order would be
+
+
+probability-bounds.jl    # Ch 6.2
+weak-law.jl              # Ch 6.3
+pdf-sum-gaussian.jl      # Ch 6.4
+convergence-distribution.jl
+poisson-gaussian.jl
+clt-visualize.jl
+clt-moment.jl
+clt-failure.jl
+
+I took some liberties rewriting the code in a more Julian style.
