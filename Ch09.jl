@@ -197,15 +197,3 @@ plot!(PF2, PD2; args..., label = "Neyman-Pearson", legend=:bottomright)
 
 ####################################################################
 ## ROC on real data
-using DelimitedFiles, GLM
- ch9_ROC_example_data.txt (790KB)
-% MATLAB: construct data
-% Do not worry if you cannot understand this code.
-% It is not the focus on this book.
-load fisheriris
-pred = meas(51:end,1:2);
-resp = (1:100)'>50;
-mdl = fitglm(pred,resp,'Distribution','binomial','Link','logit');
-scores = mdl.Fitted.Probability;
-labels = [ones(1,50), zeros(1,50)];
-save('ch9_ROC_example_data','scores','labels');
