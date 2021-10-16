@@ -1,5 +1,4 @@
-I left as a set of scripts. Hopefully that isn't an issue. The order would be
-
+I left the set of scripts in case any adjustments for style are to be made.
 
 probability-bounds.jl    # Ch 6.2
 weak-law.jl              # Ch 6.3
@@ -10,4 +9,4 @@ clt-visualize.jl
 clt-moment.jl
 clt-failure.jl
 
-I took some liberties rewriting the code in a more Julian style.
+These are stitched together in ../Ch06.jl
