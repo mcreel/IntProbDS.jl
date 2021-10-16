@@ -2,20 +2,20 @@
 # Julia code generate the histogram
 using Plots,DelimitedFiles
 f = readdlm("ch3_data_english.txt")
-bar(f/100,xticks = (1:26,'a':'z'),yticks = 0.0:0.02:0.1)
+bar(f/100,xticks = (1:26,'a':'z'),yticks = 0.0:0.02:0.1,label = false)
 
 # Exercise "Histogram of the throwing a die"
 # Julia code generate the histogram
 using Plots,Random
 q = rand(1:6,100)
-histogram(q,bins = 6,normalize = true)
+histogram(q,bins = 6,normalize = true,label = "N = 100")
 
 # Exercise "Histogram of an exponential random variable"
 # Julia code used to generate the plots
 using Plots,Random,Distributions
 λ = 1
 X = rand(Exponential(1/λ),1_000)
-histogram(X,bins = 200)
+histogram(X,bins = 200,label = "K = 200")
 
 # Exercise "Cross validation loss"
 using Plots,Random,Distributions,StatsBase
@@ -30,7 +30,7 @@ for i = 1:195
     J[i] = 2/((n-1)*h)-((n+1)/((n-1)*h))*sum( (hist.weights/n).^2 )
 end
 
-plot(m,J)
+plot(m,J,label = false)
 
 # Exercise "Expectation E[X] where X is uniform from [0,1]"
 using Random,Statistics
@@ -56,8 +56,8 @@ X = rand(Binomial(n,p),1_000)
 histogram(X,bins = 2,label = false)
 
 # Julia code to generate Erdos Renyi Graph
-using Random,LinearAlgebra,GraphRecipes
-A = rand(40,40) .< 0.3
+using Plots,Random,LinearAlgebra,GraphRecipes
+A = rand(40,40) .< 0.1
 A = triu(A,1)
 A = A + A'
 graphplot(A)
@@ -114,7 +114,7 @@ plot(x,y,line = :stem,markershape = :circle,label = "Binomial,n = 5000,p = 0.01"
 plot!(x,z,label = "Poisson,λ = 50")
 
 # Photon Shot Noise
-using Plots,Distributions,Images,ImageView,Random
+using Distributions,Images,ImageView,Random
 x = Float64.(load("cameraman.tif"))
 
 α = 10
