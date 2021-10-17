@@ -1,12 +1,12 @@
 # Julia code to compare the probability bounds
 using Distributions, Plots
 
-epsilon = 0.1
-sigma   = 1
+ϵ = 0.1
+σ   = 1
 
-p_exact(N) = 1 - cdf(Normal(), sqrt(N) * epsilon / sigma)
-p_cheby(N) = sigma^2 / (epsilon^2 * N);
-p_chern(N) = exp(-epsilon^2 * N / (2*sigma^2));
+p_exact(N) = 1 - cdf(Normal(), sqrt(N) * ϵ / σ)
+p_cheby(N) = σ^2 / (ϵ^2 * N);
+p_chern(N) = exp(-ϵ^2 * N / (2*σ^2));
 
 ex_args    = (linewidth=2, color=RGB(1.0, 0.5, 0.0), label="Exact", markershape=:circle)
 chb_args   = (linewidth=2, color=RGB(0.2, 0.7, 0.1), label="Chebyshev", linestyle=:dashdot)

@@ -18,5 +18,7 @@ scatter(Nset, y; xaxis=:log10, xticks=[1e2, 1e3, 1e4, 1e5],
         markershape=:x, color=:black,
         ylabel="sample average",
         legend=false)
+
+
 plot!(Nset, p .+ 3*sqrt.(p*(1-p) ./ Nset); color=:red, linewidth=4)
 plot!(Nset, p .- 3*sqrt.(p*(1-p) ./ Nset); color=:red, linewidth=4)
