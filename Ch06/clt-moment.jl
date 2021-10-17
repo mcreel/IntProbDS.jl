@@ -5,13 +5,12 @@ N = 2
 p = 0.5;
 
 B = Bernoulli(p)
-mu, sigma = mean(B), std(B)/sqrt(N) # for Xbar
-Z = Normal(mu, sigma)
-
+μ, σ = mean(B), std(B)/sqrt(N) # for Xbar
+Z = Normal(μ, σ)
 
 m_Bernoulli(s) = mgf(B,s)    # (1 - p + p*exp(s))
 m_B(s) = m_Bernoulli(s/N)^N  # (X₁ + ⋯ + Xₙ)/n
-m_Z(s) = mgf(Z,s)            # exp(mu * s + sigma^2*s^2/2)
+m_Z(s) = mgf(Z,s)            # exp(μ * s + σ^2*s^2/2)
 
 bin_args = (linewidth=8, color=RGB(0.1, 0.6, 1),
             yaxis=:log, yticks = [10.0^i for i in -1:4],

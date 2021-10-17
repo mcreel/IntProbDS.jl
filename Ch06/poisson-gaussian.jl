@@ -2,10 +2,10 @@
 using Distributions, Plots
 
 N = 4; # N = 10, N = 50;
-lambda = 1
+λ = 1
 
-P = Poisson(N*lambda)
-Z = Normal(mean(P), std(P))
+P = Poisson(N*λ)
+Z = Normal(mean(P), std(P))  # Nλ, √(Nλ)
 
 p_b(x) = pdf(P, x) # evaluate on integers
 p_n(x) = pdf(Z, x)
