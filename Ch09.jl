@@ -197,3 +197,30 @@ plot!(PF2, PD2; args..., label = "Neyman-Pearson", legend=:bottomright)
 
 ####################################################################
 ## ROC on real data
+using DelimitedFiles, Plots
+scores = readdlm("ch9_ROC_example_data.txt")
+scores = scores[:] # a vector
+tau = range(0.,1.,length=1000)
+labels = [ones(50); zeros(50)]
+PF = zeros(1000)
+PD = zeros(1000)
+for i=1:1000
+    idx   = (scores .<= tau[i])
+    predict = zeros(100)
+    predict[idx]   .= 1.
+    true_positive  = 0; true_negative  = 0;
+    false_positive = 0; false_negative = 0;
+    for j=1:100
+        if (predict[j]==1) && (labels[j]==1)
+            true_positive += 1   end
+        if (predict[j]==1) && (labels[j]==0)
+            false_positive += 1 end
+        if (predict[j]==0) && (labels[j]==1)
+            false_negative += 1 end
+        if (predict[j]==0) && (labels[j]==0)
+            true_negative += 1   end
+    end
+    PF[i] = false_positive/50
+    PD[i] = true_positive/50
+end
+plot(PF, PD, linewidth=3, legend=false)
