@@ -85,7 +85,7 @@ for i=1:3
     # Bootstrap dataset
     idx = rand(1:N, N)
     Xb1 = X[idx]
-    push!(plot_array, histogram(Xb1, bins = range(-5,10,length=30)))
+    push!(plot_array, histogram(Xb1, bins = range(-5.,10.,length=30)))
 end
 plot(plot_array..., label=false)
 
@@ -148,19 +148,19 @@ p = cdf(Normal(), -1.92)
 ####################################################################
 ## Plot an ROC curve
 # Julia code to plot ROC curve
-using Distributions, Plots
-sigma = 2.
-mu = 3.
+using Distributions, Plots, Statistics
+σ = 2.
+μ = 3.
 PF1 = zeros(1000); PD1 = zeros(1000)
 PF2 = zeros(1000); PD2 = zeros(1000)
-alphaset = range(0.,1.,length=1000)
+αset = range(0.,1.,length=1000)
 d = Normal()
 for i=1:1000
-    alpha = alphaset[i]
-    PF1[i] = alpha
-    PD1[i] = alpha
-    PF2[i] = alpha
-    PD2[i] = 1. - cdf(d, quantile(d, 1-alpha)-mu/sigma)
+    α = αset[i]
+    PF1[i] = α
+    PD1[i] = α
+    PF2[i] = α
+    PD2[i] = 1. - cdf(d, quantile(d, 1-α)-μ/σ)
 end
 plot(PF1, PD1, linewidth=3, label = "Blind guess")
 plot!(PF2, PD2, linewidth=3, label = "Neyman-Pearson", legend=:bottomright)
@@ -173,23 +173,23 @@ auc2 = sum(PD2.*[0.; diff(PF2)])
 ## Another ROC curve
 # Julia code to generate the ROC curve.
 using Distributions, Plots
-sigma = 2.
-mu = 3.
+σ = 2.
+μ = 3.
 PF1 = zeros(1000); PD1 = zeros(1000)
 PF2 = zeros(1000); PD2 = zeros(1000)
-alphaset = range(0.,0.5,length=1000)
+αset = range(0.,0.5,length=1000)
 d = Normal()
 for i=1:1000
-    alpha = alphaset[i]
-    PF1[i] = 2. *alpha
-    PD1[i] = 1. - (cdf(d, quantile(d,1. - alpha) - mu/sigma) - 
-        cdf(d, -quantile(d, 1. -alpha) - mu/sigma))
+    α = αset[i]
+    PF1[i] = 2. *α
+    PD1[i] = 1. - (cdf(d, quantile(d,1. - α) - μ/σ) - 
+        cdf(d, -quantile(d, 1. -α) - μ/σ))
 end
-alphaset = range(0.,1.,length=1000)
+αset = range(0.,1.,length=1000)
 for i=1:1000
-    alpha = alphaset[i]
-    PF2[i] = alpha
-    PD2[i] = 1. - cdf(d, quantile(d, 1-alpha)-mu/sigma)
+    α = αset[i]
+    PF2[i] = α
+    PD2[i] = 1. - cdf(d, quantile(d, 1-α)-μ/σ)
 end
 args = (linewidth=3, xlabel = "p_F", ylabel="p_D")
 plot(PF1, PD1; args..., label = "Proposed decision")
