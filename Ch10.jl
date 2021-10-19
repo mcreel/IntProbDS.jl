@@ -111,6 +111,14 @@ heatmap(t, t, R, yticks= -1:0.25:1, xticks= -1:0.25:1, legend=false, yflip=true)
 using Plots
 using DSP
 
+# Figure 1
+X₁ = randn(1000)
+X₂ = randn(1000)
+
+plot(X₁, linewidth=2, linestyle=:dot, color=:blue, legend=false)
+plot!(X₂, linewidth=2, linestyle=:dot, color=:black)
+
+# Figure 2
 N  = 1000 # number of sample paths
 T  = 1000 # number of time stamps
 X  = randn(N, T)
@@ -120,9 +128,8 @@ for i in 1:N
     xc[i, :] .= xcorr(X[i, :], X[i, :]) / T
 end
 
-plot(xc[1, :], linewidth=2, linestyle=:dot, color=:blue)
-plot!(xc[2, :], linewidth=2, linestyle=:dot, color=:black)
-
+plot(xc[1, :], linewidth=2, linestyle=:dot, color=:blue, label="correlation of sample 1")
+plot!(xc[2, :], linewidth=2, linestyle=:dot, color=:black, label="correlation of sample 2")
 ####################################################################
 
 # Julia code for Example 10.15
@@ -155,6 +162,7 @@ ylims!((-0.05, 0.2))
 ####################################################################
 
 # Julia code to solve the Yule Walker Equation
+using Plots, LaTeXStrings
 using ToeplitzMatrices
 using DelimitedFiles
 using DSP
@@ -167,10 +175,27 @@ R = SymmetricToeplitz(y_corr[N:N+K-1])
 lhs = y_corr[N+1:N+K]
 h = R \ lhs
 
+# Figure 1
+plot(y, linewidth=4, color=:blue, label=L"Y[n]")
+
+# Figure 2
+plot(y_corr, linewidth=4, color=:black, label=L"R_Y[k]")
+
 ####################################################################
 
 # Julia code to predict the samples
+using DelimitedFiles
+using ToeplitzMatrices
 using Plots
+
+y = vec(readdlm("ch10_LPC_data_02.txt"))
+K = 10
+N = length(y)
+
+y_corr = xcorr(y, y)
+R = SymmetricToeplitz(y_corr[N:N+K-1])
+lhs = y_corr[N+1:N+K]
+h = R \ lhs
 
 z = y[311:320]
 ŷ = zeros(340)
@@ -203,9 +228,14 @@ H = Sy ./ (Sy + Sw)
 Ŷ = H .* fft_len(x, 639)
 ŷ = real.(ifft(Ŷ))
 
+# Figure 1
 plot(x, linewidth=4, color=:gray, label="Noise Input X[n]", legend=:bottomleft)
-plot!(ŷ[1:320], linewidth=2, color=:red, label="Wiener Filtered Ŷ[n]")
+plot!(ŷ[1:320], linewidth=2, color=:red, label="Wiener Filtered Yhat[n]")
 plot!(y, linewidth=2, linestyle=:dot, color=:black, label="Ground Truth Y[n]")
+
+# Figure 2
+plot(Rw, linewidth=4, color=:blue, label="h[n]")
+####################################################################
 
 # Julia code to solve the Wiener deconvolution problem
 using DelimitedFiles
