@@ -3,7 +3,7 @@ function fft_len(x::AbstractVector, len::Int)
     if len > length(x)
         return fft([x; zeros(len - length(x))])
     else
-        return fft(x)[1:len]
+        return fft(x[1:len])
     end
 end
 
@@ -135,6 +135,7 @@ plot!(xc[2, :], linewidth=2, linestyle=:dot, color=:black, label="correlation of
 # Julia code for Example 10.15
 using Plots, LaTeXStrings
 using Images
+using DSP
 
 # Figure 1
 t = -10:0.001:10
@@ -184,9 +185,10 @@ plot(y_corr, linewidth=4, color=:black, label=L"R_Y[k]")
 ####################################################################
 
 # Julia code to predict the samples
-using DelimitedFiles
 using ToeplitzMatrices
+using DelimitedFiles
 using Plots
+using DSP
 
 y = vec(readdlm("ch10_LPC_data_02.txt"))
 K = 10
@@ -258,5 +260,5 @@ Ŷ = H .* fft_len(x, 639)
 ŷ = real.(ifft(Ŷ))
 
 plot(x, linewidth=4, color=:gray, label="Noise Input X[n]")
-plot!(16:320+15, ŷ[1:320], linewidth=2, color=:red, label="Wiener Filtered Ŷ[n]")
+plot!(16:320+15, ŷ[1:320], linewidth=2, color=:red, label="Wiener Filtered Yhat[n]")
 plot!(y, linewidth=2, linestyle=:dot, color=:black, label="Ground Truth Y[n]")
