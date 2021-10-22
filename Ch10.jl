@@ -55,8 +55,8 @@ for col in eachcol(x)
     col .= rand() .^ t
 end
 
-plot(t, x, line=:stem, linewidth=2, shape=:circle, color=:gray80, legend=false)
-plot!(t, 1 ./ (t .+ 1), line=:stem, linewidth=2, shape=:circle, markersize=6, color=:darkred)
+sticks(t, x, linewidth=2, shape=:circle, color=:gray80, legend=false)
+sticks!(t, 1 ./ (t .+ 1), linewidth=2, shape=:circle, markersize=6, color=:darkred)
 
 ####################################################################
 
