@@ -8,7 +8,7 @@ function fft_len(x::AbstractVector, len::Int)
 end
 
 function conv_same(x::AbstractVector, y::AbstractVector)
-    s = length(y) ÷ 2
+    s = div(length(y), 2, RoundUp)
     e = length(x) + s - 1
     return conv(x, y)[s:e]
 end
