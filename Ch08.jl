@@ -28,9 +28,7 @@ T = 100
 x = [rand.(Poisson.(λ)) for _=1:T]
 y = [x[i] .>= 1. for i=1:T]
 λhat = -log.(1. .- mean(y))
-##
 imshow(x[1]) # a single sample image
-##
 imshow(λhat) # the ML recovered image
 
 
@@ -60,9 +58,9 @@ p1 = plot(L₂.(η), η,  linewidth=5, color=:blue, label=false, xflip=true)
 ylabel!("η") 
 hline!([0.5], label=false, color=:green)
 title!("ℒ₂(η|S=$S)")
-# blank place holder plot
+## blank place holder plot
 p3 = plot(grid=false, xaxis=false, yaxis=false, xticks=false, yticks=false)
-## plot the whole set in the final image
+# plot the whole set in the final image
 plot(p1, p2, p3, p4)
 
 
