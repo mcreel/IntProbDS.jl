@@ -104,7 +104,7 @@ scatter!(0.5 * ones(20), x[626, :], markersize=4, color=:blue)
 t = range(-1, 1, length=1000) 
 R = SymmetricToeplitz(0.5 * cos.(2π * t))
  
-heatmap(t, t, R, yticks= -1:0.25:1, xticks= -1:0.25:1, legend=false, yflip=true)
+heatmap(t, t, collect(R), yticks= -1:0.25:1, xticks= -1:0.25:1, legend=false, yflip=true)
 
 ####################################################################
 
@@ -169,6 +169,7 @@ using ToeplitzMatrices
 using DelimitedFiles
 using DSP
 
+download("https://probability4datascience.com/data/ch10_LPC_data.txt", "ch10_LPC_data.txt")
 y = vec(readdlm("ch10_LPC_data.txt"))
 K = 10
 N = length(y)
@@ -190,7 +191,7 @@ using ToeplitzMatrices
 using DelimitedFiles
 using Plots
 using DSP
-
+download("https://probability4datascience.com/data/ch10_LPC_data_02.txt", "ch10_LPC_data_02.txt")
 y = vec(readdlm("ch10_LPC_data_02.txt"))
 K = 10
 N = length(y)
@@ -200,11 +201,12 @@ R = SymmetricToeplitz(y_corr[N:N+K-1])
 lhs = y_corr[N+1:N+K]
 h = R \ lhs
 
-z = y[311:320]
+z= y[311:320]
 ŷ = zeros(340)
 ŷ[1:320] .= y
 
 for t in 1:20
+    global y,z
     pred = z' * h
     z = [z[2:10]; pred]
     ŷ[320+t] = pred
