@@ -79,8 +79,6 @@ display(p4)
 # Julia code to demonstrate robust regression
 
 using LinearAlgebra, LegendrePolynomials, Convex, SCS
-import MathOptInterface
-const MOI = MathOptInterface
 
 #----------------------------------------------------------
 """
@@ -95,8 +93,8 @@ function linprog_Convex(c,A,sense,b)
     #c1 = sense(A*x,b)             #restriction, for Ax <= b, use sense = (<=)
     c1 = A*x <= b
     prob = minimize(dot(c,x),c1)
-    solve!(prob,()->SCS.Optimizer(verbose = false))
-    x_i = prob.status == MOI.OPTIMAL ? vec(evaluate(x)) : NaN
+    solve!(prob,SCS.Optimizer; silent_solver = true)
+    x_i = prob.status == Convex.MOI.OPTIMAL ? vec(evaluate(x)) : NaN
     return x_i
 end
 #----------------------------------------------------------
@@ -271,7 +269,7 @@ function LassoEN(Y,X,λ,δ=0.0,β₀=0)
     L4 = sumsquares(b-β₀)         #sum((b-β₀)^2)
 
     Sol = minimize(L1-2*L2+λ*L3+δ*L4)      #u'u + λ*sum(|b|) + δ*sum(b^2), where u = Y-Xb
-    solve!(Sol,()->SCS.Optimizer(verbose = false))
+    solve!(Sol,SCS.Optimizer; silent_solver = true)
     b_i = vec(evaluate(b))
 
     return b_i
@@ -280,8 +278,6 @@ end
 #----------------------------------------------------------
 
 using LinearAlgebra, DelimitedFiles, Convex, SCS
-import MathOptInterface
-const MOI = MathOptInterface
 
 data  = readdlm("dataset/ch7_data_crime.txt")
 y     = data[:,1]        # the observed crime rate
@@ -313,8 +309,6 @@ display(p10b)
 # Julia code to demonstrate overfitting and LASSO
 
 using LinearAlgebra, LegendrePolynomials, Convex, SCS
-import MathOptInterface
-const MOI = MathOptInterface
 
 N = 20                                          # Generate data
 x = range(-1,stop=1,length=N)
