@@ -8,8 +8,8 @@ using Distributions, Plots, Printf
 gmm = MixtureModel(Normal[Normal(), Normal(5., 1.),], [0.3, 0.7])
 x = range(-5., 10., length=1000)
 # the population distribution
-plot(x, pdf(gmm, x), linewidth=3, label=false, title="Population distribution")
-# histograms of 4 random samples of size 50
+plot(x, pdf.(gmm, x), linewidth=3, label=false, title="Population distribution")
+## histograms of 4 random samples of size 50
 plot_array = [] 
 for i=1:4
     bin = -5:10
@@ -18,7 +18,7 @@ for i=1:4
     push!(plot_array, histogram(Y, bins=bin, label = tt, legend=:topleft))
 end
 plot(plot_array...)
-# histogram of sample average
+## histogram of sample average
 M = zeros(10000)
 bin = range(2., 5., step=0.1)
 for i = 1:10000
@@ -40,10 +40,10 @@ using Distributions
 # Julia code to plot the t-distribution
 using Distributions, Plots
 x = range(-5.,5.,length=100)
-p1 = pdf(Normal(),x)
-p2 = pdf(TDist(11-1),x)
-p3 = pdf(TDist(3-1),x)
-p4 = pdf(TDist(2-1),x)
+p1 = pdf.(Normal(),x)
+p2 = pdf.(TDist(11-1),x)
+p3 = pdf.(TDist(3-1),x)
+p4 = pdf.(TDist(2-1),x)
 plot([p1,p2,p3,p4], label = ["Gaussian(0,1)" "t-dist, N = 11" "t-dist, N = 3" "t-dist, N = 2"], legend=:topright)
 
 ####################################################################
@@ -71,15 +71,15 @@ CI_U = θhat + z*σhat/sqrt(N)
 # Julia code to illustrate bootstrap
 using Plots, Distributions, Statistics
 gmm = MixtureModel(Normal[Normal(), Normal(5., 1.),], [0.3, 0.7])
-# visualize the population
+## visualize the population
 x = range(-5., 10., length=1000);
-f = pdf(gmm, x);
-plot(x, pdf(gmm,x), linewidth=3, label="Population", legend=:topleft)
-# Visualize bootstrap dataset, the real sample data
+f = pdf.(gmm, x);
+plot(x, pdf.(gmm,x), linewidth=3, label="Population", legend=:topleft)
+## Visualize bootstrap dataset, the real sample data
 N = 100
 X = rand(gmm, N) # the real sample data
 p1 = histogram(X, bins = range(-5,10,length=30), label=false)
-# visualize 3 bootstrap samples
+## visualize 3 bootstrap samples
 plot_array = [] 
 for i=1:3
     # Bootstrap dataset
@@ -99,7 +99,7 @@ for i=1:K               # repeat K times
 end
 M = mean(θhat)          # bootstrap mean
 V = var(θhat)           # bootstrap variance
-# histogram of bootstrap replications of estimator
+## histogram of bootstrap replications of estimator
 histogram(θhat, bins=range(3.5,5.5,length=30), legend=false)
 
 ####################################################################
@@ -198,6 +198,7 @@ plot!(PF2, PD2; args..., label = "Neyman-Pearson", legend=:bottomright)
 ####################################################################
 ## ROC on real data
 using DelimitedFiles, Plots
+download("https://probability4datascience.com/data/ch9_ROC_example_data.txt", "./ch9_ROC_example_data.txt")
 scores = readdlm("ch9_ROC_example_data.txt")
 scores = scores[:] # a vector
 tau = range(0.,1.,length=1000)
